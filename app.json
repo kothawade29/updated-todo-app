@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "todo-app-updated",
+    "slug": "todo-app-updated",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "todo-app-updated"
+}
