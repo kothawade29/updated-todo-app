@@ -19,7 +19,7 @@ function AppTask({ navigation }) {
 
   function updateTask(task, id, date) {
     let copyItems = [...taskItems];
-    for (const item of taskItems) {
+    for (const item of copyItems) {
       if (item.id === id) {
         item.task = task;
         item.date = date;
