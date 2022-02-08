@@ -1,21 +1,28 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import 'react-native-gesture-handler';
+import { StatusBar } from "expo-status-bar";
+import React from "react";
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
-  );
-}
+import TodoApp from './TodoApp';
+import TaskList from './TaskList';
+// import AppTask from './AppTask';
+// import AddTask from './AddTask';
+// import TaskList from './TaskList';
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+import { NavigationContainer } from "@react-navigation/native";
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { Button, StyleSheet, Text, View } from "react-native";
+// ------------------------------DRAWER_APP--------------------------------------------
+  const Drawer=createDrawerNavigator();
+
+  function App() {
+    return (
+      <NavigationContainer>
+        <Drawer.Navigator initialRouteName='TaskList'>
+          <Drawer.Screen name="TodoApp" component={TodoApp}/>
+          <Drawer.Screen name="TaskList" component={TaskList} />
+        </Drawer.Navigator>
+      </NavigationContainer>
+    );
+  }
+  
+  export default App;
