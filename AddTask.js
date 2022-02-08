@@ -19,7 +19,6 @@ function AddTask({ route, navigation }) {
 
   // ------------DateTimePickerCode------------------------------------
   const [date, setDate] = useState(new Date());
-  const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
 
   const onChange = (event, selectedDate) => {
@@ -28,13 +27,8 @@ function AddTask({ route, navigation }) {
     setDate(currentDate);
   };
 
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
   const showDatepicker = () => {
-    showMode("date");
+    setShow(true);
   };
   // ------------DateTimePickerCodeEnds------------------------------------
 
@@ -60,7 +54,7 @@ function AddTask({ route, navigation }) {
             <DateTimePicker
               testID="dateTimePicker"
               value={date}
-              mode={mode}
+              mode={"date"}
               is24Hour={true}
               display="default"
               onChange={onChange}

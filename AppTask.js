@@ -28,6 +28,12 @@ function AppTask({ navigation }) {
     settaskItems(copyItems);
   }
 
+  function sortTask(taskItems) {
+    let copyItems = [...taskItems];
+    copyItems.sort((a, b) => a.date - b.date);
+    settaskItems(copyItems);
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.headerView}>
@@ -35,14 +41,19 @@ function AppTask({ navigation }) {
       </View>
 
       <View style={styles.newTaskButton}>
-        <Button
-          title=" New task"
-          onPress={() => {
-            navigation.navigate("AddTask", {
-              addTask: addTask,
-            });
-          }}
-        />
+        <View>
+          <Button
+            title=" New task"
+            onPress={() => {
+              navigation.navigate("AddTask", {
+                addTask: addTask,
+              });
+            }}
+          />
+        </View>
+        <View style={styles.filterButton}>
+          <Button title="Filter Task" onPress={() => sortTask(taskItems)} />
+        </View>
       </View>
 
       <View style={styles.displayView}>
@@ -106,12 +117,13 @@ const styles = StyleSheet.create({
   newTaskButton: {
     alignItems: "center",
     justifyContent: "center",
-    // flexDirection:'row',
+    flexDirection: "row",
   },
   myTasksButton: {
     alignItems: "center",
     justifyContent: "center",
     marginTop: 10,
+    // flexDirection:'row'
   },
   displayView: {
     margin: 20,
@@ -131,6 +143,9 @@ const styles = StyleSheet.create({
   },
   deleteButton: {
     marginTop: 10,
+  },
+  filterButton: {
+    marginLeft: 10,
   },
 });
 export default AppTask;

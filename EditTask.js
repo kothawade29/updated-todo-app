@@ -17,7 +17,6 @@ function EditTask({ navigation, route }) {
   const [Task, setTask] = useState(task);
   // --------------DatePickerCode--------------------------
   const [date, setDate] = useState(Ddate);
-  const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
 
   const onChange = (event, selectedDate) => {
@@ -26,13 +25,8 @@ function EditTask({ navigation, route }) {
     setDate(currentDate);
   };
 
-  const showMode = (currentMode) => {
-    setShow(true);
-    setMode(currentMode);
-  };
-
   const showDatepicker = () => {
-    showMode("date");
+    setShow(true);
   };
   // ---------------------DatePickerCodeEnds-------------------
 
@@ -56,7 +50,7 @@ function EditTask({ navigation, route }) {
             <DateTimePicker
               testID="dateTimePicker"
               value={date}
-              mode={mode}
+              mode={"date"}
               is24Hour={true}
               display="default"
               onChange={onChange}
