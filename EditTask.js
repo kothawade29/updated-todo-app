@@ -13,8 +13,9 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 // -------------------------Edit Task---------------------------------------
 
 function EditTask({ navigation, route }) {
-  const { updateTask, task, id, Ddate } = route.params;
+  const { updateTask, startTask, task, id, Ddate } = route.params;
   const [Task, setTask] = useState(task);
+
   // --------------DatePickerCode--------------------------
   const [date, setDate] = useState(Ddate);
   const [show, setShow] = useState(false);
@@ -59,14 +60,26 @@ function EditTask({ navigation, route }) {
           )}
         </View>
 
-        <Button
-          title="Update Task"
-          onPress={() => {
-            updateTask(Task, id, date);
-            setTask(null);
-            Keyboard.dismiss();
-          }}
-        />
+        <View style={styles.taskFunction}>
+          <View>
+            <Button
+              title="Update Task"
+              onPress={() => {
+                updateTask(Task, id, date);
+                setTask(null);
+                Keyboard.dismiss();
+              }}
+            />
+          </View>
+          <View style={styles.startTask}>
+            <Button
+              title="Start Task"
+              onPress={() => {
+                startTask(new Date(), id);
+              }}
+            />
+          </View>
+        </View>
       </View>
     </View>
   );
@@ -97,6 +110,12 @@ const styles = StyleSheet.create({
   },
   updateDateButton: {
     marginBottom: 10,
+  },
+  taskFunction: {
+    flexDirection: "row",
+  },
+  startTask: {
+    marginLeft: 10,
   },
 });
 

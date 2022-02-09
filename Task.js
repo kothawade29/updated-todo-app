@@ -14,6 +14,9 @@ function Task(props) {
     <View style={styles.taskBoxView}>
       <Text style={styles.task}>{props.text[0]}</Text>
       <Text style={styles.dueDate}>Due Date : {props.text[1]}</Text>
+      {props.text[2] !== "" ? (
+        <Text>Task Start Date : {props.text[2]} </Text>
+      ) : null}
     </View>
   );
 }

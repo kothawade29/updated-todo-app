@@ -19,7 +19,7 @@ import { Button, StyleSheet, Text, View } from "react-native";
       <NavigationContainer>
         <Drawer.Navigator initialRouteName='TaskList'>
           <Drawer.Screen name="TodoApp" component={TodoApp}/>
-          <Drawer.Screen name="TaskList" component={TaskList} />
+          <Drawer.Screen name="TaskList" component={TaskList}  />
         </Drawer.Navigator>
       </NavigationContainer>
     );

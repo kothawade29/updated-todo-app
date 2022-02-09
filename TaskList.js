@@ -23,12 +23,12 @@ import EditTask from './EditTask';
           <Stack.Screen
             name="AddTask"
             component={AddTask}
-            options={{ title: "Add Tasks" }}
+            options={{ title: "Add Tasks" },{ headerShown: false }}
           />
           <Stack.Screen
             name="EditTask"
             component={EditTask}
-            options={{ title: "Edit Task" }}
+            options={{ title: "Edit Task" },{ headerShown: false }}
           />
         </Stack.Navigator>
     );

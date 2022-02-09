@@ -9,14 +9,22 @@ import Task from "./Task";
 
 function AppTask({ navigation }) {
   const [taskItems, settaskItems] = useState([]);
+
+  // ---------function to Add Task to TaskList ----
   function addTask(task, id, date) {
-    settaskItems([...taskItems, { task: task, id: id, date: date }]);
+    settaskItems([
+      ...taskItems,
+      { task: task, id: id, date: date, startDate: "" },
+    ]);
   }
+
+  // ------function to delete Task from TaskList -------
   function deleteTask(id) {
     let copyItems = [...taskItems];
     settaskItems(copyItems.filter((task) => task.id !== id));
   }
 
+  // ----- function to updateTask ------
   function updateTask(task, id, date) {
     let copyItems = [...taskItems];
     for (const item of copyItems) {
@@ -28,9 +36,25 @@ function AppTask({ navigation }) {
     settaskItems(copyItems);
   }
 
+  // ---- function to sort task according to due date -----
   function sortTask(taskItems) {
     let copyItems = [...taskItems];
     copyItems.sort((a, b) => a.date - b.date);
+    settaskItems(copyItems);
+  }
+
+  // ----- function to add date of started task ------
+  function startTask(date, id) {
+    let copyItems = [...taskItems];
+    const formattedDate = `${date.getDate()}/${
+      date.getMonth() + 1
+    }/${date.getFullYear()}`;
+
+    for (const item of copyItems) {
+      if (item.id === id) {
+        item.startDate = formattedDate;
+      }
+    }
     settaskItems(copyItems);
   }
 
@@ -55,7 +79,8 @@ function AppTask({ navigation }) {
           <Button title="Filter Task" onPress={() => sortTask(taskItems)} />
         </View>
       </View>
-
+      
+      
       <View style={styles.displayView}>
         {taskItems.map((item) => {
           return (
@@ -67,6 +92,7 @@ function AppTask({ navigation }) {
                   `${item.date.getDate()}/${
                     item.date.getMonth() + 1
                   }/${item.date.getFullYear()}`,
+                  item.startDate,
                 ]}
               />
               <View style={styles.buttonStyle}>
@@ -76,6 +102,7 @@ function AppTask({ navigation }) {
                     onPress={() => {
                       navigation.navigate("EditTask", {
                         updateTask: updateTask,
+                        startTask: startTask,
                         task: item.task,
                         id: item.id,
                         Ddate: item.date,

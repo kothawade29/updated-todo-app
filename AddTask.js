@@ -69,6 +69,7 @@ function AddTask({ route, navigation }) {
             addTask(task, id, date);
             setTask(null);
             Keyboard.dismiss();
+            navigation.goBack();
           }}
         />
       </View>
