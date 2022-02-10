@@ -11,14 +11,6 @@ import Task from "./Task";
 function AppTask({ navigation, route }) {
   const [taskItems, settaskItems] = useState([]);
 
-  const data = "Atharva";
-  function sendData() {
-    navigation.navigate("TodoApp", {
-      //  screen:"TodoApp",
-      data: data,
-    });
-  }
-
   // ---------function to Add Task to TaskList ----
   function addTask(task, id, date) {
     settaskItems([
