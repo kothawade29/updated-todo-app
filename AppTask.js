@@ -5,10 +5,19 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { Button, StyleSheet, Text, View } from "react-native";
 import Task from "./Task";
+
 // ----------------------------TaskList--------------------------------------
 
-function AppTask({ navigation }) {
+function AppTask({ navigation, route }) {
   const [taskItems, settaskItems] = useState([]);
+
+  const data = "Atharva";
+  function sendData() {
+    navigation.navigate("TodoApp", {
+      //  screen:"TodoApp",
+      data: data,
+    });
+  }
 
   // ---------function to Add Task to TaskList ----
   function addTask(task, id, date) {
@@ -63,7 +72,6 @@ function AppTask({ navigation }) {
       <View style={styles.headerView}>
         <Text style={styles.headerText}>Your Task's</Text>
       </View>
-
       <View style={styles.newTaskButton}>
         <View>
           <Button
@@ -78,9 +86,18 @@ function AppTask({ navigation }) {
         <View style={styles.filterButton}>
           <Button title="Filter Task" onPress={() => sortTask(taskItems)} />
         </View>
+        <View style={styles.homeScreenButton}>
+          <Button
+            title="MainScreen"
+            onPress={() => {
+              navigation.navigate("TodoApp", {
+                totalTask: taskItems.length,
+              });
+            }}
+          />
+        </View>
       </View>
-      
-      
+
       <View style={styles.displayView}>
         {taskItems.map((item) => {
           return (
@@ -172,6 +189,9 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   filterButton: {
+    marginLeft: 10,
+  },
+  homeScreenButton: {
     marginLeft: 10,
   },
 });
