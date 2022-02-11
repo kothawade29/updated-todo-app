@@ -2,9 +2,7 @@ import "react-native-gesture-handler";
 import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 
-import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Button, StyleSheet, Text, View } from "react-native";
 
 import AddTask from "./AddTask";
 import AppTask from "./AppTask";

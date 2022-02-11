@@ -1,19 +1,14 @@
 import { StatusBar } from "expo-status-bar";
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Button,
-  Keyboard,
-} from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
 function Task(props) {
   return (
     <View style={styles.taskBoxView}>
       <Text style={styles.task}>{props.text[0]}</Text>
-      <Text style={styles.dueDate}>Due Date : {props.text[1]}</Text>
+      <Text style={styles.dueDate}>
+        Due Date : {props.text[1]} || {props.text[3]} Hour
+      </Text>
       {props.text[2] !== "" ? (
         <Text>Task Start Date : {props.text[2]} </Text>
       ) : null}

@@ -7,6 +7,7 @@ import {
   TextInput,
   View,
   Keyboard,
+  Alert,
 } from "react-native";
 import { v4 as uuidv4 } from "uuid";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -19,6 +20,7 @@ function AddTask({ route, navigation }) {
 
   // ------------DateTimePickerCode------------------------------------
   const [date, setDate] = useState(new Date());
+  const [mode, setMode] = useState("date");
   const [show, setShow] = useState(false);
 
   const onChange = (event, selectedDate) => {
@@ -27,8 +29,17 @@ function AddTask({ route, navigation }) {
     setDate(currentDate);
   };
 
-  const showDatepicker = () => {
+  const showMode = (currentMode) => {
     setShow(true);
+    setMode(currentMode);
+  };
+
+  const showDatepicker = () => {
+    showMode("date");
+  };
+
+  const showTimepicker = () => {
+    showMode("time");
   };
   // ------------DateTimePickerCodeEnds------------------------------------
 
@@ -47,6 +58,9 @@ function AddTask({ route, navigation }) {
         />
 
         <View style={styles.dueDateButton}>
+          <View style={styles.addTimeButton}>
+            <Button onPress={showTimepicker} title="Add time" />
+          </View>
           <View>
             <Button onPress={showDatepicker} title="Add Due Date" />
           </View>
@@ -54,7 +68,7 @@ function AddTask({ route, navigation }) {
             <DateTimePicker
               testID="dateTimePicker"
               value={date}
-              mode={"date"}
+              mode={mode}
               is24Hour={true}
               display="default"
               onChange={onChange}
@@ -66,7 +80,7 @@ function AddTask({ route, navigation }) {
         <Button
           title="add task"
           onPress={() => {
-            addTask(task, id, date);
+            addTask(task, id, date, date.getHours());
             setTask(null);
             Keyboard.dismiss();
             navigation.goBack();
@@ -106,6 +120,10 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     marginTop: 5,
     marginBottom: 10,
+    flexDirection: "row",
+  },
+  addTimeButton: {
+    marginRight: 10,
   },
 });
 

@@ -1,9 +1,7 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
-import { NavigationContainer } from "@react-navigation/native";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Button, StyleSheet, Text, View } from "react-native";
+import { Button, StyleSheet, Text, View, Alert } from "react-native";
 import Task from "./Task";
 
 // ----------------------------TaskList--------------------------------------
@@ -11,15 +9,42 @@ import Task from "./Task";
 function AppTask({ navigation, route }) {
   const [taskItems, settaskItems] = useState([]);
 
-  // ---------function to Add Task to TaskList ----
-  function addTask(task, id, date) {
+  // ---------Show Alert Message function---------
+  function showAlertMessage() {
+    const date = new Date();
+    for (const task of taskItems) {
+      if (
+        task.date.getDate() === date.getDate() &&
+        task.dueTime <= date.getHours() &&
+        task.alertShown === false
+      ) {
+        Alert.alert("Over due task", `${task.task} is over due`, [
+          {
+            title: "close",
+          },
+        ]);
+        task.alertShown = true;
+      }
+    }
+  }
+  setInterval(showAlertMessage, 5000);
+
+  // ----function to Add Task to TaskList ----
+  function addTask(task, id, date, dueTime) {
     settaskItems([
       ...taskItems,
-      { task: task, id: id, date: date, startDate: "" },
+      {
+        task: task,
+        id: id,
+        date: date,
+        dueTime: dueTime,
+        startDate: "",
+        alertShown: false,
+      },
     ]);
   }
 
-  // ------function to delete Task from TaskList -------
+  // ----function to delete Task from TaskList ----
   function deleteTask(id) {
     let copyItems = [...taskItems];
     settaskItems(copyItems.filter((task) => task.id !== id));
@@ -102,6 +127,7 @@ function AppTask({ navigation, route }) {
                     item.date.getMonth() + 1
                   }/${item.date.getFullYear()}`,
                   item.startDate,
+                  item.dueTime,
                 ]}
               />
               <View style={styles.buttonStyle}>
@@ -159,13 +185,11 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 10,
-    // flexDirection:'row'
   },
   displayView: {
     margin: 20,
   },
   box: {
-    // flexDirection: "row",
     marginTop: 10,
     alignItems: "center",
     marginLeft: 20,
