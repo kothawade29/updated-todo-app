@@ -9,12 +9,49 @@ import {
   TextInput,
   Keyboard,
 } from "react-native";
+import { useSelector, useDispatch } from "react-redux";
+import { settaskItems } from "./AppSlice";
 import DateTimePicker from "@react-native-community/datetimepicker";
+
 // -------------------------Edit Task---------------------------------------
 
 function EditTask({ navigation, route }) {
-  const { updateTask, startTask, task, id, Ddate } = route.params;
+  const {  task, id, Ddate } = route.params;
+  console.log("action ----> ", JSON.stringify(Ddate));
+  const taskItems = useSelector((state) => state.todo.taskItems);
+  const dispatch = useDispatch();
   const [Task, setTask] = useState(task);
+  
+  // --------------------------------------------------------
+  function updateTask(task, id, date) {
+    let copyItems = taskItems;
+    console.log(task);
+    for (const item of copyItems) {
+      if (item.id === id) {
+        item.task = task;
+        item.date = date;
+      }
+    }
+    console.log(copyItems);
+   dispatch( settaskItems(copyItems));
+  }
+  
+  
+  function startTask(date, id) {
+    let copyItems = [...taskItems];
+    const formattedDate = `${date.getDate()}/${
+      date.getMonth() + 1
+    }/${date.getFullYear()}`;
+  
+    for (const item of copyItems) {
+      if (item.id === id) {
+        item.startDate = formattedDate;
+      }
+    }
+    dispatch(settaskItems(copyItems));
+  }
+
+
 
   // --------------DatePickerCode--------------------------
   const [date, setDate] = useState(Ddate);
@@ -68,6 +105,7 @@ function EditTask({ navigation, route }) {
                 updateTask(Task, id, date);
                 setTask(null);
                 Keyboard.dismiss();
+                navigation.goBack();
               }}
             />
           </View>

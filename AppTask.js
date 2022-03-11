@@ -1,18 +1,24 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
 
+import { useSelector, useDispatch } from "react-redux";
+import { settaskItems } from "./AppSlice";
+
 import { Button, StyleSheet, Text, View, Alert } from "react-native";
 import Task from "./Task";
 
 // ----------------------------TaskList--------------------------------------
 
 function AppTask({ navigation, route }) {
-  const [taskItems, settaskItems] = useState([]);
+  const taskItems = useSelector((state) => state.todo.taskItems);
+  const dispatch = useDispatch();
+  // const [taskItems, settaskItems] = useState([]);
 
   // ---------Show Alert Message function---------
   function showAlertMessage() {
     const date = new Date();
-    for (const task of taskItems) {
+    let copyItems = [...taskItems];
+    for (const task of copyItems) {
       if (
         task.date.getDate() === date.getDate() &&
         task.dueTime <= date.getHours() &&
@@ -31,23 +37,33 @@ function AppTask({ navigation, route }) {
 
   // ----function to Add Task to TaskList ----
   function addTask(task, id, date, dueTime) {
-    settaskItems([
-      ...taskItems,
-      {
-        task: task,
-        id: id,
-        date: date,
-        dueTime: dueTime,
-        startDate: "",
-        alertShown: false,
-      },
-    ]);
+    if (task.length <= 0) {
+      Alert.alert("Invaild", "Please enter task", [
+        {
+          title: "close",
+        },
+      ]);
+    } else {
+      dispatch(
+        settaskItems([
+          ...taskItems,
+          {
+            task: task,
+            id: id,
+            date: date,
+            dueTime: dueTime,
+            startDate: "",
+            alertShown: false,
+          },
+        ])
+      );
+    }
   }
 
   // ----function to delete Task from TaskList ----
   function deleteTask(id) {
     let copyItems = [...taskItems];
-    settaskItems(copyItems.filter((task) => task.id !== id));
+    dispatch(settaskItems(copyItems.filter((task) => task.id !== id)));
   }
 
   // ----- function to updateTask ------
@@ -59,14 +75,14 @@ function AppTask({ navigation, route }) {
         item.date = date;
       }
     }
-    settaskItems(copyItems);
+    dispatch(settaskItems(copyItems));
   }
 
   // ---- function to sort task according to due date -----
   function sortTask(taskItems) {
     let copyItems = [...taskItems];
     copyItems.sort((a, b) => a.date - b.date);
-    settaskItems(copyItems);
+    dispatch(settaskItems(copyItems));
   }
 
   // ----- function to add date of started task ------
@@ -81,7 +97,7 @@ function AppTask({ navigation, route }) {
         item.startDate = formattedDate;
       }
     }
-    settaskItems(copyItems);
+    dispatch(settaskItems(copyItems));
   }
 
   return (
@@ -107,9 +123,9 @@ function AppTask({ navigation, route }) {
           <Button
             title="MainScreen"
             onPress={() => {
-              navigation.navigate("TodoApp", {
-                totalTask: taskItems.length,
-              });
+              // navigation.navigate("TodoApp", {
+              //   totalTask: taskItems.length,
+              // });
             }}
           />
         </View>
@@ -136,8 +152,6 @@ function AppTask({ navigation, route }) {
                     title="Edit"
                     onPress={() => {
                       navigation.navigate("EditTask", {
-                        updateTask: updateTask,
-                        startTask: startTask,
                         task: item.task,
                         id: item.id,
                         Ddate: item.date,

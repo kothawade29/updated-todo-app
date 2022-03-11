@@ -119,8 +119,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 5,
-    marginBottom: 10,
-    flexDirection: "row",
+    marginBottom: 10,      flexDirection: "row",
   },
   addTimeButton: {
     marginRight: 10,
