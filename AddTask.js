@@ -80,7 +80,12 @@ function AddTask({ route, navigation }) {
         <Button
           title="add task"
           onPress={() => {
-            addTask(task, id, date, date.getHours());
+            addTask(
+              task,
+              id,
+              `${date.getDate()}/${date.getMonth() + 1}/${date.getFullYear()}`,
+              date.getHours()
+            );
             setTask(null);
             Keyboard.dismiss();
             navigation.goBack();
@@ -119,7 +124,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     marginTop: 5,
-    marginBottom: 10,      flexDirection: "row",
+    marginBottom: 10,
+    flexDirection: "row",
   },
   addTimeButton: {
     marginRight: 10,

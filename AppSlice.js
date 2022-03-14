@@ -5,8 +5,8 @@ export const AppSlice = createSlice({
         taskItems:[]
     },
     reducers:{
-        settaskItems:(state,action) =>{
-            console.log("action ----> ", JSON.stringify(action.payload));
+        settaskItems:(state,action) => {
+            // console.log("action ----> ", JSON.stringify(action.payload));
             state.taskItems=action.payload;
         }
     }

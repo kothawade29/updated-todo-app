@@ -15,25 +15,26 @@ function AppTask({ navigation, route }) {
   // const [taskItems, settaskItems] = useState([]);
 
   // ---------Show Alert Message function---------
-  function showAlertMessage() {
-    const date = new Date();
-    let copyItems = [...taskItems];
-    for (const task of copyItems) {
-      if (
-        task.date.getDate() === date.getDate() &&
-        task.dueTime <= date.getHours() &&
-        task.alertShown === false
-      ) {
-        Alert.alert("Over due task", `${task.task} is over due`, [
-          {
-            title: "close",
-          },
-        ]);
-        task.alertShown = true;
-      }
-    }
-  }
-  setInterval(showAlertMessage, 5000);
+  // function showAlertMessage() {
+  //   const date = new Date();
+  //   let copyItems = [...taskItems];
+  //   for (const task of copyItems) {
+  //     if (
+  //       task.date.getDate() === date.getDate() &&
+  //       task.dueTime <= date.getHours() &&
+  //       task.alertShown === false
+  //     ) {
+  //       Alert.alert("Over due task", `${task.task} is over due`, [
+  //         {
+  //           title: "close",
+  //         },
+  //       ]);
+  //       task.alertShown = true;
+  //     }
+  //   }
+  //   // dispatch(settaskItems(copyItems));
+  // }
+  // // setInterval(showAlertMessage, 5000);
 
   // ----function to Add Task to TaskList ----
   function addTask(task, id, date, dueTime) {
@@ -137,14 +138,7 @@ function AppTask({ navigation, route }) {
             <View style={styles.box}>
               <Task
                 key={item.id}
-                text={[
-                  item.task,
-                  `${item.date.getDate()}/${
-                    item.date.getMonth() + 1
-                  }/${item.date.getFullYear()}`,
-                  item.startDate,
-                  item.dueTime,
-                ]}
+                text={[item.task, item.date, item.startDate, item.dueTime]}
               />
               <View style={styles.buttonStyle}>
                 <View style={styles.editButton}>

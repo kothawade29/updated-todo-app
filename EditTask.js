@@ -16,33 +16,31 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 // -------------------------Edit Task---------------------------------------
 
 function EditTask({ navigation, route }) {
-  const {  task, id, Ddate } = route.params;
+  const { task, id, Ddate } = route.params;
   console.log("action ----> ", JSON.stringify(Ddate));
   const taskItems = useSelector((state) => state.todo.taskItems);
   const dispatch = useDispatch();
   const [Task, setTask] = useState(task);
-  
+
   // --------------------------------------------------------
+
   function updateTask(task, id, date) {
-    let copyItems = taskItems;
-    console.log(task);
+    let copyItems = [...taskItems];
     for (const item of copyItems) {
       if (item.id === id) {
-        item.task = task;
-        item.date = date;
+        item.task=task;
+        item.date=date;
       }
     }
-    console.log(copyItems);
-   dispatch( settaskItems(copyItems));
+    dispatch(settaskItems(copyItems));
   }
-  
-  
+
   function startTask(date, id) {
     let copyItems = [...taskItems];
     const formattedDate = `${date.getDate()}/${
       date.getMonth() + 1
     }/${date.getFullYear()}`;
-  
+
     for (const item of copyItems) {
       if (item.id === id) {
         item.startDate = formattedDate;
@@ -51,10 +49,8 @@ function EditTask({ navigation, route }) {
     dispatch(settaskItems(copyItems));
   }
 
-
-
   // --------------DatePickerCode--------------------------
-  const [date, setDate] = useState(Ddate);
+  const [date, setDate] = useState(new Date());
   const [show, setShow] = useState(false);
 
   const onChange = (event, selectedDate) => {
@@ -102,7 +98,13 @@ function EditTask({ navigation, route }) {
             <Button
               title="Update Task"
               onPress={() => {
-                updateTask(Task, id, date);
+                updateTask(
+                  Task,
+                  id,
+                  `${date.getDate()}/${
+                    date.getMonth() + 1
+                  }/${date.getFullYear()}`
+                );
                 setTask(null);
                 Keyboard.dismiss();
                 navigation.goBack();
