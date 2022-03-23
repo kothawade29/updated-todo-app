@@ -1,5 +1,4 @@
 import "react-native-gesture-handler";
-import { StatusBar } from "expo-status-bar";
 import React, { useState } from "react";
 import {
   Button,
@@ -8,45 +7,57 @@ import {
   View,
   TextInput,
   Keyboard,
+  Alert,
 } from "react-native";
 import { useSelector, useDispatch } from "react-redux";
-import { settaskItems } from "./AppSlice";
+import {
+  settaskItems,
+  setstartTask,
+  setstartedTask,
+  setstartedTaskId,
+} from "./AppSlice";
 import DateTimePicker from "@react-native-community/datetimepicker";
 
 // -------------------------Edit Task---------------------------------------
 
 function EditTask({ navigation, route }) {
   const { task, id, Ddate } = route.params;
-  console.log("action ----> ", JSON.stringify(Ddate));
+  const [updatedTask, setupdatedTask] = useState(task);
   const taskItems = useSelector((state) => state.todo.taskItems);
+  const isTaskStarted = useSelector((state) => state.todo.startTask);
   const dispatch = useDispatch();
-  const [Task, setTask] = useState(task);
 
   // --------------------------------------------------------
 
   function updateTask(task, id, date) {
-    let copyItems = [...taskItems];
-    for (const item of copyItems) {
-      if (item.id === id) {
-        item.task=task;
-        item.date=date;
+    const copyItems = taskItems.map((taskObj) => {
+      if (taskObj.id === id) {
+        return { ...taskObj, task: task, date: date };
       }
-    }
+      return taskObj;
+    });
     dispatch(settaskItems(copyItems));
   }
 
-  function startTask(date, id) {
-    let copyItems = [...taskItems];
-    const formattedDate = `${date.getDate()}/${
-      date.getMonth() + 1
-    }/${date.getFullYear()}`;
-
-    for (const item of copyItems) {
-      if (item.id === id) {
-        item.startDate = formattedDate;
-      }
+  function startTask(startDate, id) {
+    if (isTaskStarted === false) {
+      const copyItems = taskItems.map((obj) => {
+        if (obj.id === id) {
+          return { ...obj, startDate: startDate };
+        }
+        return obj;
+      });
+      dispatch(setstartTask(true));
+      dispatch(settaskItems(copyItems));
+      dispatch(setstartedTask(updatedTask));
+      dispatch(setstartedTaskId(id));
+    } else {
+      Alert.alert("Error", "Some other task is already started", [
+        {
+          title: "close",
+        },
+      ]);
     }
-    dispatch(settaskItems(copyItems));
   }
 
   // --------------DatePickerCode--------------------------
@@ -71,10 +82,10 @@ function EditTask({ navigation, route }) {
       </View>
       <View style={styles.updateTextInput}>
         <TextInput
-          value={Task}
+          value={updatedTask}
           style={styles.textInputButton}
           placeholder="Add task"
-          onChangeText={(text) => setTask(text)}
+          onChangeText={(text) => setupdatedTask(text)}
         />
         <View style={styles.updateDateButton}>
           <View>
@@ -99,13 +110,13 @@ function EditTask({ navigation, route }) {
               title="Update Task"
               onPress={() => {
                 updateTask(
-                  Task,
+                  updatedTask,
                   id,
                   `${date.getDate()}/${
                     date.getMonth() + 1
                   }/${date.getFullYear()}`
                 );
-                setTask(null);
+                setupdatedTask(null);
                 Keyboard.dismiss();
                 navigation.goBack();
               }}
@@ -115,7 +126,13 @@ function EditTask({ navigation, route }) {
             <Button
               title="Start Task"
               onPress={() => {
-                startTask(new Date(), id);
+                startTask(
+                  `${date.getDate()}/${
+                    date.getMonth() + 1
+                  }/${date.getFullYear()}`,
+                  id
+                );
+                navigation.goBack();
               }}
             />
           </View>

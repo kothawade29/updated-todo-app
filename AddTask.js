@@ -11,12 +11,16 @@ import {
 } from "react-native";
 import { v4 as uuidv4 } from "uuid";
 import DateTimePicker from "@react-native-community/datetimepicker";
+import { useSelector, useDispatch } from "react-redux";
+import { settaskItems } from "./AppSlice";
 // ----------------------ADD NEW TASK-------------------------
 
 function AddTask({ route, navigation }) {
-  const { addTask } = route.params;
+  // const { addTask } = route.params;
   const [task, setTask] = useState("");
   const id = uuidv4();
+  const taskItems = useSelector((state) => state.todo.taskItems);
+  const dispatch = useDispatch();
 
   // ------------DateTimePickerCode------------------------------------
   const [date, setDate] = useState(new Date());
@@ -42,6 +46,31 @@ function AddTask({ route, navigation }) {
     showMode("time");
   };
   // ------------DateTimePickerCodeEnds------------------------------------
+  function addTask(task, id, date, dueTime) {
+    if (task.length <= 0) {
+      Alert.alert("Invaild", "Please enter task", [
+        {
+          title: "close",
+        },
+      ]);
+    } else {
+      dispatch(
+        settaskItems([
+          ...taskItems,
+          {
+            task: task,
+            id: id,
+            date: date,
+            dueTime: dueTime,
+            startDate: "",
+            alertShown: false,
+          },
+        ])
+      );
+    }
+  }
+
+  // ------------------------------------------
 
   return (
     <View style={styles.container}>

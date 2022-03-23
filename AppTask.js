@@ -2,81 +2,48 @@ import { StatusBar } from "expo-status-bar";
 import React, { useState, useEffect } from "react";
 
 import { useSelector, useDispatch } from "react-redux";
-import { settaskItems } from "./AppSlice";
+import { settaskItems, setstartTask } from "./AppSlice";
 
 import { Button, StyleSheet, Text, View, Alert } from "react-native";
 import Task from "./Task";
-
 // ----------------------------TaskList--------------------------------------
 
 function AppTask({ navigation, route }) {
   const taskItems = useSelector((state) => state.todo.taskItems);
+  const isTaskStarted = useSelector((state) => state.todo.startTask);
   const dispatch = useDispatch();
-  // const [taskItems, settaskItems] = useState([]);
 
   // ---------Show Alert Message function---------
   // function showAlertMessage() {
-  //   const date = new Date();
-  //   let copyItems = [...taskItems];
-  //   for (const task of copyItems) {
+  //   const todayDate = new Date();
+  //   const copyItems = taskItems.map((task) => {
   //     if (
-  //       task.date.getDate() === date.getDate() &&
-  //       task.dueTime <= date.getHours() &&
-  //       task.alertShown === false
+  //       task.alertShown === false &&
+  //       task.date ===
+  //         `${todayDate.getDate()}/${
+  //           todayDate.getMonth() + 1
+  //         }/${todayDate.getFullYear()}` &&
+  //       task.dueTime <= todayDate.getHours()
   //     ) {
   //       Alert.alert("Over due task", `${task.task} is over due`, [
-  //         {
-  //           title: "close",
-  //         },
-  //       ]);
-  //       task.alertShown = true;
+  //       {
+  //         title: "close",
+  //       },
+  //     ]);
+  //     dispatch(settaskItems(copyItems));
+  //       return { ...task, alertShown: true };
   //     }
-  //   }
+  //   });
+  //   // console.log(copyItems);
   //   // dispatch(settaskItems(copyItems));
   // }
-  // // setInterval(showAlertMessage, 5000);
-
-  // ----function to Add Task to TaskList ----
-  function addTask(task, id, date, dueTime) {
-    if (task.length <= 0) {
-      Alert.alert("Invaild", "Please enter task", [
-        {
-          title: "close",
-        },
-      ]);
-    } else {
-      dispatch(
-        settaskItems([
-          ...taskItems,
-          {
-            task: task,
-            id: id,
-            date: date,
-            dueTime: dueTime,
-            startDate: "",
-            alertShown: false,
-          },
-        ])
-      );
-    }
-  }
+  // setInterval(showAlertMessage, 5000);
+  // ----------------------------------
 
   // ----function to delete Task from TaskList ----
   function deleteTask(id) {
     let copyItems = [...taskItems];
     dispatch(settaskItems(copyItems.filter((task) => task.id !== id)));
-  }
-
-  // ----- function to updateTask ------
-  function updateTask(task, id, date) {
-    let copyItems = [...taskItems];
-    for (const item of copyItems) {
-      if (item.id === id) {
-        item.task = task;
-        item.date = date;
-      }
-    }
-    dispatch(settaskItems(copyItems));
   }
 
   // ---- function to sort task according to due date -----
@@ -85,21 +52,8 @@ function AppTask({ navigation, route }) {
     copyItems.sort((a, b) => a.date - b.date);
     dispatch(settaskItems(copyItems));
   }
-
-  // ----- function to add date of started task ------
-  function startTask(date, id) {
-    let copyItems = [...taskItems];
-    const formattedDate = `${date.getDate()}/${
-      date.getMonth() + 1
-    }/${date.getFullYear()}`;
-
-    for (const item of copyItems) {
-      if (item.id === id) {
-        item.startDate = formattedDate;
-      }
-    }
-    dispatch(settaskItems(copyItems));
-  }
+  // ---------------------------------------
+  // ------------------------------------------
 
   return (
     <View style={styles.container}>
@@ -111,35 +65,23 @@ function AppTask({ navigation, route }) {
           <Button
             title=" New task"
             onPress={() => {
-              navigation.navigate("AddTask", {
-                addTask: addTask,
-              });
+              navigation.navigate("AddTask");
             }}
           />
         </View>
         <View style={styles.filterButton}>
           <Button title="Filter Task" onPress={() => sortTask(taskItems)} />
         </View>
-        <View style={styles.homeScreenButton}>
-          <Button
-            title="MainScreen"
-            onPress={() => {
-              // navigation.navigate("TodoApp", {
-              //   totalTask: taskItems.length,
-              // });
-            }}
-          />
-        </View>
       </View>
 
       <View style={styles.displayView}>
         {taskItems.map((item) => {
           return (
-            <View style={styles.box}>
+            <View style={styles.box} key={item.id}>
               <Task
-                key={item.id}
                 text={[item.task, item.date, item.startDate, item.dueTime]}
               />
+
               <View style={styles.buttonStyle}>
                 <View style={styles.editButton}>
                   <Button
@@ -217,6 +159,9 @@ const styles = StyleSheet.create({
   },
   homeScreenButton: {
     marginLeft: 10,
+  },
+  startTaskButton: {
+    marginTop: 10,
   },
 });
 export default AppTask;

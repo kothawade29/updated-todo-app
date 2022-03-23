@@ -7,6 +7,8 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import AddTask from "./AddTask";
 import AppTask from "./AppTask";
 import EditTask from "./EditTask";
+import Notification from "./Notification";
+
 // ----------------------------TaskList--------------------------------------
 const Stack = createNativeStackNavigator();
 function TaskList({ navigation, route }) {
